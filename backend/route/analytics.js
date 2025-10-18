@@ -28,18 +28,21 @@ router.get('/activity', auth, async (req, res) => {
   }
 });
 
-// Dashboard stats
+// Get dashboard stats
 router.get('/stats', auth, async (req, res) => {
   try {
     const totalTasks = await Task.countDocuments({ user: req.userId });
-    const completedTasks = await Task.countDocuments({ user: req.userId, completed: true });
+    const completedTasks = await Task.countDocuments({ 
+      user: req.userId, 
+      completed: true 
+    });
     const pendingTasks = totalTasks - completedTasks;
 
     res.json({
       totalTasks,
       completedTasks,
       pendingTasks,
-      projects: 12
+      projects: 12 // This could be dynamic if you add project model
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
